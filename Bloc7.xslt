@@ -3,34 +3,37 @@
     <xsl:template match="/">
         <html>
             <body>
+                <h2>Disponibles</h2>
                 <ul>
-                    <xsl:for-each select="/biblioteca/llibre">
+                    <xsl:for-each select="/biblioteca/llibre[@estat='disponible']">
                         <li><xsl:value-of select="titol"/></li>
                     </xsl:for-each>
                 </ul>
+                <h2>Preu > 12</h2>
+                <ul>
+                    <xsl:for-each select="/biblioteca/llibre[preu > 12]">
+                        <li><xsl:value-of select="titol"/></li>
+                    </xsl:for-each>
+                </ul>
+                <h2>Tots els llibres</h2>
                 <ul>
                     <xsl:for-each select="/biblioteca/llibre">
                         <li>
-                            <xsl:value-of select="titol"/> - <xsl:value-of select="autor"/>
+                            <xsl:value-of select="titol"/>
+                            <xsl:if test="any &lt; 1980"> — Llibre antic</xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="@estat='prestat'"> — En préstec</xsl:when>
+                                <xsl:otherwise> — Disponible</xsl:otherwise>
+                            </xsl:choose>
                         </li>
                     </xsl:for-each>
                 </ul>
-                <table border="1">
-                    <tr>
-                        <th>Títol</th>
-                        <th>Autor</th>
-                        <th>Any</th>
-                        <th>Preu</th>
-                    </tr>
-                    <xsl:for-each select="/biblioteca/llibre">
-                        <tr>
-                            <td><xsl:value-of select="titol"/></td>
-                            <td><xsl:value-of select="autor"/></td>
-                            <td><xsl:value-of select="any"/></td>
-                            <td><xsl:value-of select="preu"/></td>
-                        </tr>
+                <h2>Fantasia o Distopia</h2>
+                <ul>
+                    <xsl:for-each select="/biblioteca/llibre[genere='fantasia' or genere='distopia']">
+                        <li><xsl:value-of select="titol"/></li>
                     </xsl:for-each>
-                </table> 
+                </ul> 
             </body>
         </html>
     </xsl:template>
