@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    
     <xsl:template match="/">
         <html>
-            <body>
-                <h2>Disponibles</h2>
-                <ul>
-                    <xsl:for-each select="/biblioteca/llibre[@estat='disponible']">
-                        <li><xsl:value-of select="titol"/></li>
-                    </xsl:for-each>
-                </ul>
-                <h2>Preu > 12</h2>
-                <ul>
-                    <xsl:for-each select="/biblioteca/llibre[preu > 12]">
-                        <li><xsl:value-of select="titol"/></li>
-                    </xsl:for-each>
-                </ul>
-                <h2>Tots els llibres</h2>
+            <body>                
+                <h2>Per any</h2>
                 <ul>
                     <xsl:for-each select="/biblioteca/llibre">
-                        <li>
-                            <xsl:value-of select="titol"/>
-                            <xsl:if test="any &lt; 1980"> — Llibre antic</xsl:if>
-                            <xsl:choose>
-                                <xsl:when test="@estat='prestat'"> — En préstec</xsl:when>
-                                <xsl:otherwise> — Disponible</xsl:otherwise>
-                            </xsl:choose>
-                        </li>
+                        <xsl:sort select="any" data-type="number" order="ascending"/>
+                        <li><xsl:value-of select="titol"/> (<xsl:value-of select="any"/>)</li>
                     </xsl:for-each>
                 </ul>
-                <h2>Fantasia o Distopia</h2>
+                <h2>Per títol</h2>
                 <ul>
-                    <xsl:for-each select="/biblioteca/llibre[genere='fantasia' or genere='distopia']">
+                    <xsl:for-each select="/biblioteca/llibre">
+                        <xsl:sort select="titol" order="ascending"/>
                         <li><xsl:value-of select="titol"/></li>
                     </xsl:for-each>
-                </ul> 
+                </ul>
+                <h2>Per preu (descendent)</h2>
+                <ul>
+                    <xsl:for-each select="/biblioteca/llibre">
+                        <xsl:sort select="preu" data-type="number" order="descending"/>
+                        <li><xsl:value-of select="titol"/> — <xsl:value-of select="preu"/>€</li>
+                    </xsl:for-each>
+                </ul>
+                <h2>Taula per any</h2>
+                <table border="1">
+                    <tr><th>Títol</th><th>Autor</th><th>Any</th><th>Preu</th></tr>
+                    <xsl:for-each select="/biblioteca/llibre">
+                        <xsl:sort select="any" data-type="number" order="ascending"/>
+                        <tr>
+                            <td><xsl:value-of select="titol"/></td>
+                            <td><xsl:value-of select="autor"/></td>
+                            <td><xsl:value-of select="any"/></td>
+                            <td><xsl:value-of select="preu"/></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+                <h2>Disponibles per títol</h2>
+                <ul>
+                    <xsl:for-each select="/biblioteca/llibre[@estat='disponible']">
+                        <xsl:sort select="titol" order="ascending"/>
+                        <li><xsl:value-of select="titol"/></li>
+                    </xsl:for-each>
+                </ul>
             </body>
         </html>
-    </xsl:template>
+    </xsl:template>   
 </xsl:stylesheet>
