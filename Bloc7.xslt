@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="xml" indent="yes"/>   
     <xsl:template match="/">
-        <html>
-            <body>
-                <h1>Biblioteca</h1>
-                <h2>Llibres</h2>
-                <ul>
-                    <xsl:apply-templates select="/biblioteca/llibre"/>
-                </ul>
-                
-                <h2>Revistes</h2>
-                <ul>
-                    <xsl:apply-templates select="/biblioteca/revista"/>
-                </ul>
-            </body>
-        </html>
-    </xsl:template>
-    <xsl:template match="llibre">
-        <li><xsl:value-of select="titol"/></li>
-    </xsl:template>
-    <xsl:template match="revista">
-        <li>
-            <xsl:value-of select="titol"/> (
-            <xsl:value-of select="mes"/> <xsl:value-of select="any"/>)
-        </li>
+        <biblioteca>
+            <xsl:for-each select="/biblioteca/llibre">
+                <obra>
+                    <nom><xsl:value-of select="titol"/></nom>
+                    <escriptor><xsl:value-of select="autor"/></escriptor>
+                    <genere><xsl:value-of select="genere"/></genere>
+                    <any><xsl:value-of select="any"/></any>
+                    <preu><xsl:value-of select="preu"/></preu>
+                </obra>
+            </xsl:for-each>
+        </biblioteca>
     </xsl:template>
 </xsl:stylesheet>
